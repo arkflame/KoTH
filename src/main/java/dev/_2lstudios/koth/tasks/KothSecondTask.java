@@ -51,6 +51,8 @@ public class KothSecondTask implements Runnable {
 
           if (localTime.getHour() == kothTime.getHour() && localTime.getMinute() == kothTime.getMinute()) {
             this.kothManager.startNext();
+          } else {
+            kothScheduleManager.updateNext();
           }
         }
       }
