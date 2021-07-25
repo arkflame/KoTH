@@ -177,14 +177,14 @@ public class KothEvent {
                 .concat("\n&e&lGanador: &6" + winner.getDisplayName() + "\n")));
       }
 
-      KothScheduleManager kothScheduleManager = KothPlugin.getKothScheduleManager();
+      KothScheduleManager kothScheduleManager = KothPlugin.getInstance().getKothScheduleManager();
       KothSchedule currentSchedule = kothScheduleManager.getCurrent();
 
       if (currentSchedule != null && currentSchedule.getName().equals(this.name)) {
-        KothPlugin.getKothScheduleManager().setCurrent(null);
+        kothScheduleManager.setCurrent(null);
       }
 
-      KothPlugin.getKothScheduleManager().updateNext();
+      kothScheduleManager.updateNext();
     }
   }
 

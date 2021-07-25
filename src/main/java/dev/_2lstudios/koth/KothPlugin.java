@@ -20,15 +20,13 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class KothPlugin extends JavaPlugin {
-    private static KothScheduleManager kothScheduleManager = null;
+    private static KothPlugin instance = null;
+
+    private KothScheduleManager kothScheduleManager = null;
     private KothPlaceholders kothPlaceholders = null;
 
-    public static KothScheduleManager getKothScheduleManager() {
-        return kothScheduleManager;
-    }
-
-    public static void setKothScheduleManager(KothScheduleManager kothScheduleManager) {
-        KothPlugin.kothScheduleManager = kothScheduleManager;
+    public static KothPlugin getInstance() {
+        return instance;
     }
 
     public void onEnable() {
@@ -39,7 +37,7 @@ public class KothPlugin extends JavaPlugin {
         File kothsFolder = new File(dataFolderPath + "/koths/");
 
         kothsFolder.mkdirs();
-        setKothScheduleManager(new KothScheduleManager(dataFolderPath));
+        kothScheduleManager = new KothScheduleManager(dataFolderPath);
         KothManager kothManager = new KothManager((Plugin) this, configurationUtil, kothScheduleManager);
 
         kothScheduleManager.load();
@@ -64,5 +62,9 @@ public class KothPlugin extends JavaPlugin {
 
     public void onDisable() {
         kothScheduleManager.save();
+    }
+
+    public KothScheduleManager getKothScheduleManager() {
+        return kothScheduleManager;
     }
 }
