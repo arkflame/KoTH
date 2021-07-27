@@ -29,7 +29,13 @@ public class KothPlugin extends JavaPlugin {
         return instance;
     }
 
+    public KothScheduleManager getKothScheduleManager() {
+        return kothScheduleManager;
+    }
+
     public void onEnable() {
+        instance = this;
+
         ConfigurationUtil configurationUtil = new ConfigurationUtil((Plugin) this);
         Server server = getServer();
         PluginManager pluginManager = server.getPluginManager();
@@ -62,9 +68,5 @@ public class KothPlugin extends JavaPlugin {
 
     public void onDisable() {
         kothScheduleManager.save();
-    }
-
-    public KothScheduleManager getKothScheduleManager() {
-        return kothScheduleManager;
     }
 }
