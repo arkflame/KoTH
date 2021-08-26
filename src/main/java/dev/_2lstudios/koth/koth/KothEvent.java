@@ -31,21 +31,21 @@ public class KothEvent {
   private final Collection<KothPlayer> kothPlayers;
   private Location position1;
 
-  KothEvent(Plugin plugin, ConfigurationUtil configurationUtil, Collection<KothPlayer> kothPlayers, String name) {
+  KothEvent(final Plugin plugin, final ConfigurationUtil configurationUtil, final Collection<KothPlayer> kothPlayers, final String name) {
     World world;
     this.position1 = null;
     this.position2 = null;
     this.running = false;
     this.plugin = plugin;
 
-    YamlConfiguration yamlConfiguration = configurationUtil.getConfiguration("%datafolder%/koths/" + name + ".yml");
-    String worldName = yamlConfiguration.getString("locations.world");
-    Vector vector1 = yamlConfiguration.getVector("locations.vector1");
-    Vector vector2 = yamlConfiguration.getVector("locations.vector2");
-    Collection<ItemStack> rewards = new HashSet<>();
-    ConfigurationSection rewardsSection = yamlConfiguration.getConfigurationSection("rewards");
-    int maxTime = yamlConfiguration.getInt("maxtime");
-    int captureTime = yamlConfiguration.getInt("capturetime");
+    final YamlConfiguration yamlConfiguration = configurationUtil.getConfiguration("%datafolder%/koths/" + name + ".yml");
+    final String worldName = yamlConfiguration.getString("locations.world");
+    final Vector vector1 = yamlConfiguration.getVector("locations.vector1");
+    final Vector vector2 = yamlConfiguration.getVector("locations.vector2");
+    final Collection<ItemStack> rewards = new HashSet<>();
+    final ConfigurationSection rewardsSection = yamlConfiguration.getConfigurationSection("rewards");
+    final int maxTime = yamlConfiguration.getInt("maxtime");
+    final int captureTime = yamlConfiguration.getInt("capturetime");
 
     if (worldName != null) {
       world = Bukkit.getWorld(worldName);
@@ -53,7 +53,7 @@ public class KothEvent {
       world = null;
     }
     if (rewardsSection != null)
-      for (String rewardKey : rewardsSection.getKeys(false)) {
+      for (final String rewardKey : rewardsSection.getKeys(false)) {
         rewards.add(yamlConfiguration.getItemStack("rewards." + rewardKey));
       }
     this.configurationUtil = configurationUtil;
@@ -100,9 +100,9 @@ public class KothEvent {
 
   public void broadcast() {
     String capturing;
-    KothPlayer topPlayer = getTopPlayer();
-    int x = getCenterX();
-    int z = getCenterZ();
+    final KothPlayer topPlayer = getTopPlayer();
+    final int x = getCenterX();
+    final int z = getCenterZ();
 
     if (topPlayer == null) {
       capturing = "\n&eNadie esta capturando el evento de &b&lKoTH &econ premios!";
@@ -116,7 +116,7 @@ public class KothEvent {
   }
 
   public void start() {
-    Server server = this.plugin.getServer();
+    final Server server = this.plugin.getServer();
 
     if (this.position1 != null && this.position2 != null) {
       this.lastStartTime = System.currentTimeMillis();
@@ -127,14 +127,24 @@ public class KothEvent {
         ChatColor.translateAlternateColorCodes('&', "\n&eEl evento de &b&lKoTH &econ premios ha comenzado!"));
   }
 
-  public void stop(KothPlayer kothPlayer) {
+  public void stop() {
+    final KothScheduleManager kothScheduleManager = KothPlugin.getInstance().getKothScheduleManager();
+    final KothSchedule currentSchedule = kothScheduleManager.getCurrent();
+
+    if (currentSchedule != null) {
+      kothScheduleManager.setCurrent(null);
+    }
+
+    kothScheduleManager.updateNext();
+
     if (this.running) {
-      Server server = this.plugin.getServer();
-      Player winner = (kothPlayer != null) ? server.getPlayer(kothPlayer.getUUID()) : null;
+      final Server server = this.plugin.getServer();
+      final KothPlayer kothPlayer = getTopPlayer();
+      final Player winner = (kothPlayer != null) ? server.getPlayer(kothPlayer.getUUID()) : null;
 
       this.running = false;
 
-      for (KothPlayer kothPlayer1 : new HashSet<>(this.kothPlayers)) {
+      for (final KothPlayer kothPlayer1 : new HashSet<>(this.kothPlayers)) {
         if (kothPlayer1.getKothEvent() == this) {
           kothPlayer1.setKothEvent(null);
         }
@@ -146,23 +156,21 @@ public class KothEvent {
 
                 .concat("\n&cNo hay ganadores del evento!\n")));
       } else {
-        Location winnerLocation = winner.getLocation();
+        final Location winnerLocation = winner.getLocation();
 
         if (this.rewards != null && this.rewards.length > 0) {
-          PlayerInventory playerInventory = winner.getInventory();
+          final PlayerInventory playerInventory = winner.getInventory();
 
           server.getScheduler().runTask(this.plugin, () -> {
-            World world = winnerLocation.getWorld();
-
-            Firework firework = (Firework) world.spawnEntity(winnerLocation, EntityType.FIREWORK);
-
-            FireworkMeta fireworkMeta = firework.getFireworkMeta();
+            final World world = winnerLocation.getWorld();
+            final Firework firework = (Firework) world.spawnEntity(winnerLocation, EntityType.FIREWORK);
+            final FireworkMeta fireworkMeta = firework.getFireworkMeta();
 
             fireworkMeta.addEffect(FireworkEffect.builder().trail(true).with(FireworkEffect.Type.BALL_LARGE)
                 .withColor(Color.GREEN).with(FireworkEffect.Type.BALL).withColor(Color.YELLOW).build());
-
             firework.setFireworkMeta(fireworkMeta);
-            for (ItemStack itemStack : this.rewards) {
+
+            for (final ItemStack itemStack : this.rewards) {
               if (playerInventory.firstEmpty() != -1) {
                 playerInventory.addItem(new ItemStack[] { itemStack });
               } else {
@@ -173,51 +181,41 @@ public class KothEvent {
         }
         server.broadcastMessage(
             ChatColor.translateAlternateColorCodes('&', "\n&eEl evento de &b&lKoTH &econ premios ha finalizado!"
-
-                .concat("\n&e&lGanador: &6" + winner.getDisplayName() + "\n")));
+                + "\n&e&lGanador: &6" + winner.getDisplayName() + "\n"));
       }
-
-      KothScheduleManager kothScheduleManager = KothPlugin.getInstance().getKothScheduleManager();
-      KothSchedule currentSchedule = kothScheduleManager.getCurrent();
-
-      if (currentSchedule != null && currentSchedule.getName().equals(this.name)) {
-        kothScheduleManager.setCurrent(null);
-      }
-
-      kothScheduleManager.updateNext();
     }
   }
 
-  public void setMaxTime(int maxTime) {
+  public void setMaxTime(final int maxTime) {
     this.maxTime = maxTime;
     save();
   }
 
-  public void setCaptureTime(int captureTime) {
+  public void setCaptureTime(final int captureTime) {
     this.captureTime = captureTime;
     save();
   }
 
-  public void setPosition1(Location location1) {
+  public void setPosition1(final Location location1) {
     this.position1 = location1;
     save();
   }
 
-  public void setPosition2(Location location2) {
+  public void setPosition2(final Location location2) {
     this.position2 = location2;
     save();
   }
 
-  public void setRewards(ItemStack[] rewards) {
+  public void setRewards(final ItemStack[] rewards) {
     this.rewards = rewards;
     save();
   }
 
-  private boolean isBetween(double pos1, double pos2, double pos3) {
+  private boolean isBetween(final double pos1, final double pos2, final double pos3) {
     return ((pos1 >= pos2 && pos1 <= pos3) || (pos1 <= pos2 && pos1 >= pos3));
   }
 
-  public boolean isInside(Location location) {
+  public boolean isInside(final Location location) {
     if (this.position1 != null && this.position2 != null && this.position1.getWorld() == location.getWorld()
         && this.position2.getWorld() == location.getWorld()) {
       return (isBetween(location.getX(), this.position1.getX(), this.position2.getX())
@@ -232,8 +230,8 @@ public class KothEvent {
     KothPlayer topPlayer = null;
     int topSeconds = 0;
 
-    for (KothPlayer kothPlayer : new HashSet<>(this.kothPlayers)) {
-      int secondsInside = kothPlayer.getSecondsInside();
+    for (final KothPlayer kothPlayer : new HashSet<>(this.kothPlayers)) {
+      final int secondsInside = kothPlayer.getSecondsInside();
 
       if (kothPlayer.getKothEvent() == this && secondsInside > topSeconds) {
         topPlayer = kothPlayer;
@@ -245,7 +243,7 @@ public class KothEvent {
   }
 
   private void save() {
-    YamlConfiguration yamlConfiguration = new YamlConfiguration();
+    final YamlConfiguration yamlConfiguration = new YamlConfiguration();
 
     if (this.position1 != null) {
       yamlConfiguration.set("locations.world", this.position1.getWorld().getName());
@@ -259,7 +257,7 @@ public class KothEvent {
 
     if (this.rewards != null && this.rewards.length > 0) {
       for (int i = 0; i < this.rewards.length; i++) {
-        ItemStack itemStack = this.rewards[i];
+        final ItemStack itemStack = this.rewards[i];
 
         yamlConfiguration.set("rewards." + i, itemStack);
       }
@@ -269,14 +267,14 @@ public class KothEvent {
 
   public void tick() {
     if (this.running) {
-      KothPlayer kothPlayer = getTopPlayer();
+      final KothPlayer kothPlayer = getTopPlayer();
 
       if (kothPlayer != null) {
         if (kothPlayer.getSecondsInside() * 1000 >= this.captureTime) {
-          stop(kothPlayer);
+          stop();
         }
       } else if (System.currentTimeMillis() - this.lastStartTime >= this.maxTime) {
-        stop(null);
+        stop();
       }
     }
   }
@@ -296,7 +294,7 @@ public class KothEvent {
   public String getTimeLeft() {
     double milliseconds;
     if (this.running) {
-      KothPlayer topPlayer = getTopPlayer();
+      final KothPlayer topPlayer = getTopPlayer();
 
       if (topPlayer == null) {
         milliseconds = getMaxTime() - System.currentTimeMillis() - getLastStartTime();

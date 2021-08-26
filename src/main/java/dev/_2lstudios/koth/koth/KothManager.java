@@ -96,7 +96,7 @@ public class KothManager {
     KothSchedule schedule = this.kothScheduleManager.getCurrent();
 
     if (schedule != null) {
-      getKothEvent(schedule.getName()).stop(null);
+      getKothEvent(schedule.getName()).stop();
 
       return true;
     }

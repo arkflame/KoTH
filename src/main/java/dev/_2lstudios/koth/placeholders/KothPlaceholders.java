@@ -16,20 +16,20 @@ public class KothPlaceholders extends PlaceholderExpansion {
   private final KothManager kothManager;
   private final KothScheduleManager kothScheduleManager;
 
-  public KothPlaceholders(Plugin plugin, KothManager kothManager, KothScheduleManager kothScheduleManager) {
+  public KothPlaceholders(final Plugin plugin, final KothManager kothManager, final KothScheduleManager kothScheduleManager) {
     this.plugin = plugin;
     this.kothManager = kothManager;
     this.kothScheduleManager = kothScheduleManager;
   }
 
-  private String formatNumber(long number) {
+  private String formatNumber(final long number) {
     return (number > 9L) ? ("" + number) : ((number < 1L) ? "00" : ("0" + number));
   }
 
-  public String getFormattedDuration(Duration duration) {
-    String hour = formatNumber(duration.toHours());
-    String minute = formatNumber(duration.toMinutes() % 60L);
-    String seconds = formatNumber(duration.toMillis() / 1000L % 60L);
+  public String getFormattedDuration(final Duration duration) {
+    final String hour = formatNumber(duration.toHours());
+    final String minute = formatNumber(duration.toMinutes() % 60L);
+    final String seconds = formatNumber(duration.toMillis() / 1000L % 60L);
 
     return hour + ":" + minute + ":" + seconds;
   }
@@ -46,28 +46,27 @@ public class KothPlaceholders extends PlaceholderExpansion {
     return this.plugin.getDescription().getVersion();
   }
 
-  public String onPlaceholderRequest(Player player, String identifier) {
-    if (this.plugin.isEnabled() && player != null && !identifier.isEmpty()) {
+  public String onPlaceholderRequest(final Player player, final String identifier) {
+    if (this.plugin.isEnabled() && !identifier.isEmpty()) {
       if (identifier.equalsIgnoreCase("time")) {
-        Collection<? extends Player> onlinePlayers = this.plugin.getServer().getOnlinePlayers();
-        int onlinePlayersCount = onlinePlayers.size();
+        final int onlinePlayersCount = this.plugin.getServer().getOnlinePlayers().size();
 
         if (onlinePlayersCount >= 0) {
-          KothSchedule currentSchedule = this.kothScheduleManager.getCurrent();
+          final KothSchedule currentSchedule = this.kothScheduleManager.getCurrent();
 
           if (currentSchedule != null) {
-            KothEvent currentKothEvent = this.kothManager.getKothEvent(currentSchedule.getName());
+            final KothEvent currentKothEvent = this.kothManager.getKothEvent(currentSchedule.getName());
 
             if (currentKothEvent != null) {
               return currentKothEvent.getTimeLeft();
             }
           } else {
-            KothSchedule nextSchedule = this.kothScheduleManager.next();
+            final KothSchedule nextSchedule = this.kothScheduleManager.next();
 
             if (nextSchedule != null) {
-              LocalTime nextScheduleTime = nextSchedule.getLocalTime();
-              LocalTime localTime = LocalTime.now();
-              Duration duration = Duration.between(localTime, nextScheduleTime);
+              final LocalTime nextScheduleTime = nextSchedule.getLocalTime();
+              final LocalTime localTime = LocalTime.now();
+              final Duration duration = Duration.between(localTime, nextScheduleTime);
 
               return getFormattedDuration(duration);
             }
@@ -77,6 +76,7 @@ public class KothPlaceholders extends PlaceholderExpansion {
 
       return String.valueOf("--:--:--");
     }
+
     return null;
   }
 }
