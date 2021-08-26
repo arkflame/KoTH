@@ -5,18 +5,18 @@ import java.util.UUID;
 public class KothPlayer {
   private final UUID uuid;
   private KothEvent kothEvent = null;
-  private int secondsInside = 0;
+  private int secondsCaptured = 0;
   
   KothPlayer(UUID uuid) {
     this.uuid = uuid;
   }
   
-  public int getSecondsInside() {
-    return this.secondsInside;
+  public int getSecondsCaptured() {
+    return this.secondsCaptured;
   }
   
-  public void setSecondsInside(int secondsInside) {
-    this.secondsInside = secondsInside;
+  public void setSecondsCaptured(int secondsCaptured) {
+    this.secondsCaptured = secondsCaptured;
   }
   
   public KothEvent getKothEvent() {
@@ -25,7 +25,7 @@ public class KothPlayer {
   
   public void setKothEvent(KothEvent kothEvent) {
     if (this.kothEvent != kothEvent) {
-      this.secondsInside = 0;
+      this.secondsCaptured = 0;
       this.kothEvent = kothEvent;
     } 
   }

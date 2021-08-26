@@ -231,7 +231,7 @@ public class KothEvent {
     int topSeconds = 0;
 
     for (final KothPlayer kothPlayer : new HashSet<>(this.kothPlayers)) {
-      final int secondsInside = kothPlayer.getSecondsInside();
+      final int secondsInside = kothPlayer.getSecondsCaptured();
 
       if (kothPlayer.getKothEvent() == this && secondsInside > topSeconds) {
         topPlayer = kothPlayer;
@@ -265,30 +265,34 @@ public class KothEvent {
     this.configurationUtil.saveConfiguration(yamlConfiguration, "%datafolder%/koths/" + this.name + ".yml");
   }
 
-  public void tick() {
-    if (this.running) {
-      final KothPlayer kothPlayer = getTopPlayer();
-
-      if (kothPlayer != null) {
-        if (kothPlayer.getSecondsInside() * 1000 >= this.captureTime) {
-          stop();
-        }
-      } else if (System.currentTimeMillis() - this.lastStartTime >= this.maxTime) {
-        stop();
-      }
-    }
+  public long getTotalTime() {
+    return System.currentTimeMillis() - getLastStartTime();
   }
 
   private int getMaxTime() {
     return this.maxTime;
   }
 
-  private double getLastStartTime() {
+  private long getLastStartTime() {
     return this.lastStartTime;
   }
 
   private int getCaptureTime() {
     return this.captureTime;
+  }
+
+  public void tick() {
+    if (this.running) {
+      final KothPlayer kothPlayer = getTopPlayer();
+
+      if (kothPlayer != null) {
+        if (kothPlayer.getSecondsCaptured() * 1000 >= getCaptureTime()) {
+          stop();
+        }
+      } else if (getTotalTime() >= getMaxTime()) {
+        stop();
+      }
+    }
   }
 
   public String getTimeLeft() {
@@ -297,9 +301,9 @@ public class KothEvent {
       final KothPlayer topPlayer = getTopPlayer();
 
       if (topPlayer == null) {
-        milliseconds = getMaxTime() - System.currentTimeMillis() - getLastStartTime();
+        milliseconds = getMaxTime() - getTotalTime();
       } else {
-        milliseconds = (getCaptureTime() - topPlayer.getSecondsInside() * 1000);
+        milliseconds = (getCaptureTime() - topPlayer.getSecondsCaptured() * 1000);
       }
     } else {
       milliseconds = 0.0D;
