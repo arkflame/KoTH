@@ -34,9 +34,3 @@ public class KothPlayer {
     return this.uuid;
   }
 }
-
-
-/* Location:              C:\Users\LinsaFTW\Desktop\KoTH.jar!\dev\_2lstudios\koth\koth\KothPlayer.class
- * Java compiler version: 8 (52.0)
- * JD-Core Version:       1.1.3
- */

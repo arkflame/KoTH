@@ -104,9 +104,3 @@ public class KothManager {
     return false;
   }
 }
-
-/*
- * Location:
- * C:\Users\LinsaFTW\Desktop\KoTH.jar!\dev\_2lstudios\koth\koth\KothManager.
- * class Java compiler version: 8 (52.0) JD-Core Version: 1.1.3
- */

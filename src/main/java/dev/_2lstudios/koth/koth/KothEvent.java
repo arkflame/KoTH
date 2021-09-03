@@ -135,8 +135,6 @@ public class KothEvent {
       kothScheduleManager.setCurrent(null);
     }
 
-    kothScheduleManager.updateNext();
-
     if (this.running) {
       final Server server = this.plugin.getServer();
       final KothPlayer kothPlayer = getTopPlayer();

@@ -85,8 +85,6 @@ public class KothScheduleManager {
       if (localTime.getHour() == hour && localTime.getMinute() == minute) {
         scheduleIterator.remove();
 
-        updateNext();
-
         return true;
       }
     }
@@ -99,8 +97,6 @@ public class KothScheduleManager {
 
     this.schedules.add(new KothSchedule(hour, minute, name));
     Collections.sort(this.schedules);
-
-    updateNext();
 
     return true;
   }
@@ -127,7 +123,11 @@ public class KothScheduleManager {
   }
 
   public KothSchedule next() {
-    return this.nextKothSchedule;
+    if (schedules.contains(nextKothSchedule)) {
+      return nextKothSchedule;
+    }
+
+    return null;
   }
 
   public void setCurrent(KothSchedule kothSchedule) {

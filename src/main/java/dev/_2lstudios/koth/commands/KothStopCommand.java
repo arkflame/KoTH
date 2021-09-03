@@ -12,6 +12,6 @@ public class KothStopCommand {
       return;
     }
     if (!kothManager.stop())
-      player.sendMessage(ChatColor.translateAlternateColorCodes('&', "No hay ningun koth para comenzar!"));
+      player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cNo hay ningun koth para terminar!"));
   }
 }

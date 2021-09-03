@@ -47,7 +47,6 @@ public class KothPlugin extends JavaPlugin {
         KothManager kothManager = new KothManager((Plugin) this, configurationUtil, kothScheduleManager);
 
         kothScheduleManager.load();
-        kothScheduleManager.updateNext();
 
         getCommand("koth").setExecutor((CommandExecutor) new KothCommand(kothManager, kothScheduleManager));
         getCommand("koths").setExecutor((CommandExecutor) new KothsCommand(kothManager, kothScheduleManager));

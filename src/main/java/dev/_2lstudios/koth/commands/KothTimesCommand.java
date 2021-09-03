@@ -42,7 +42,6 @@ public class KothTimesCommand {
       sender.sendMessage(
           ChatColor.RED + "No hay tiempos de koth establecidos!\nHorario actual: " + ChatColor.YELLOW + formattedTime);
     } else {
-
       StringBuilder scheduleBuilder = new StringBuilder("&aTiempos de KoTH:\n");
 
       for (KothSchedule kothSchedule : schedules) {

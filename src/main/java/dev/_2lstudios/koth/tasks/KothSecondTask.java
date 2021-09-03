@@ -51,8 +51,6 @@ public class KothSecondTask implements Runnable {
 
           if (localTime.getHour() == kothTime.getHour() && localTime.getMinute() == kothTime.getMinute()) {
             this.kothManager.startNext();
-          } else {
-            kothScheduleManager.updateNext();
           }
         }
       }
@@ -70,6 +68,8 @@ public class KothSecondTask implements Runnable {
         if (kothPlayer.getKothEvent() != null)
           kothPlayer.setSecondsCaptured(kothPlayer.getSecondsCaptured() + 1);
       }
+
+      kothScheduleManager.updateNext();
     }
   }
 }
