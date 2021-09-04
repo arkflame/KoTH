@@ -1,15 +1,16 @@
 package dev._2lstudios.koth.placeholders;
 
+import java.time.Duration;
+import java.time.LocalTime;
+
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+
 import dev._2lstudios.koth.koth.KothEvent;
 import dev._2lstudios.koth.koth.KothManager;
 import dev._2lstudios.koth.schedule.KothSchedule;
 import dev._2lstudios.koth.schedule.KothScheduleManager;
-import java.time.Duration;
-import java.time.LocalTime;
-import java.util.Collection;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 public class KothPlaceholders extends PlaceholderExpansion {
   private final Plugin plugin;

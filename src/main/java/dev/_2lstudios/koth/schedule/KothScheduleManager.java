@@ -14,7 +14,6 @@ public class KothScheduleManager {
   private final List<KothSchedule> schedules = new ArrayList<>();
   private final String dataFolderPath;
   private KothSchedule current = null;
-  private KothSchedule nextKothSchedule = null;
 
   public KothScheduleManager(String dataFolderPath) {
     this.dataFolderPath = dataFolderPath;
@@ -105,26 +104,15 @@ public class KothScheduleManager {
     return (a.getHour() > b.getHour() || (a.getHour() == b.getHour() && a.getMinute() > b.getMinute()));
   }
 
-  public void updateNext() {
-    LocalTime localTime = LocalTime.now();
-    KothSchedule kothSchedule = null;
-    LocalTime lastKothTime = null;
-
-    for (KothSchedule kothSchedule1 : this.schedules) {
-      LocalTime kothLocalTime = kothSchedule1.getLocalTime();
-
-      if (isAfter(kothLocalTime, localTime) && (lastKothTime == null || !isAfter(kothLocalTime, lastKothTime))) {
-        kothSchedule = kothSchedule1;
-        lastKothTime = kothSchedule.getLocalTime();
-      }
-    }
-
-    this.nextKothSchedule = kothSchedule;
-  }
-
   public KothSchedule next() {
-    if (schedules.contains(nextKothSchedule)) {
-      return nextKothSchedule;
+    LocalTime localTime = LocalTime.now();
+
+    for (KothSchedule kothSchedule : this.schedules) {
+      LocalTime kothLocalTime = kothSchedule.getLocalTime();
+
+      if (isAfter(kothLocalTime, localTime)) {
+        return kothSchedule;
+      }
     }
 
     return null;

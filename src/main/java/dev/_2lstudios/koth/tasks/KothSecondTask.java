@@ -68,8 +68,6 @@ public class KothSecondTask implements Runnable {
         if (kothPlayer.getKothEvent() != null)
           kothPlayer.setSecondsCaptured(kothPlayer.getSecondsCaptured() + 1);
       }
-
-      kothScheduleManager.updateNext();
     }
   }
 }
