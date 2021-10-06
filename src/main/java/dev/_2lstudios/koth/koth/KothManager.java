@@ -1,14 +1,18 @@
 package dev._2lstudios.koth.koth;
 
-import dev._2lstudios.koth.schedule.KothSchedule;
-import dev._2lstudios.koth.schedule.KothScheduleManager;
-import dev._2lstudios.koth.utils.ConfigurationUtil;
 import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+
+import dev._2lstudios.koth.schedule.KothSchedule;
+import dev._2lstudios.koth.schedule.KothScheduleManager;
+import dev._2lstudios.koth.utils.ConfigurationUtil;
+import net.md_5.bungee.api.ChatColor;
 
 public class KothManager {
   private final Plugin plugin;
@@ -80,12 +84,23 @@ public class KothManager {
     KothSchedule schedule = this.kothScheduleManager.next();
 
     if (schedule != null) {
-      final KothEvent koth = getKothEvent(schedule.getName());
+      final String name = schedule.getName();
+      final KothEvent koth = getKothEvent(name);
 
       if (koth != null) {
         koth.start();
 
         this.kothScheduleManager.setCurrent(schedule);
+
+        for (final Player player : plugin.getServer().getOnlinePlayers()) {
+          final String message = ChatColor.translateAlternateColorCodes('&', "&aEl KoTH &e" + name + "&a ha iniciado!");
+          final String title = ChatColor.translateAlternateColorCodes('&', "&cKOTH");
+          final String subtitle = ChatColor.translateAlternateColorCodes('&',
+              "&f¡El koth &e" + name + "&f ha iniciado!");
+
+          player.sendMessage(message);
+          player.sendTitle(title, subtitle, 10, 40, 20);
+        }
       }
     }
 

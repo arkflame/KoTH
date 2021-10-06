@@ -31,14 +31,16 @@ public class KothEvent {
   private final Collection<KothPlayer> kothPlayers;
   private Location position1;
 
-  KothEvent(final Plugin plugin, final ConfigurationUtil configurationUtil, final Collection<KothPlayer> kothPlayers, final String name) {
+  KothEvent(final Plugin plugin, final ConfigurationUtil configurationUtil, final Collection<KothPlayer> kothPlayers,
+      final String name) {
     World world;
     this.position1 = null;
     this.position2 = null;
     this.running = false;
     this.plugin = plugin;
 
-    final YamlConfiguration yamlConfiguration = configurationUtil.getConfiguration("%datafolder%/koths/" + name + ".yml");
+    final YamlConfiguration yamlConfiguration = configurationUtil
+        .getConfiguration("%datafolder%/koths/" + name + ".yml");
     final String worldName = yamlConfiguration.getString("locations.world");
     final Vector vector1 = yamlConfiguration.getVector("locations.vector1");
     final Vector vector2 = yamlConfiguration.getVector("locations.vector2");
@@ -105,14 +107,17 @@ public class KothEvent {
     final int z = getCenterZ();
 
     if (topPlayer == null) {
-      capturing = "\n&eNadie esta capturando el evento de &b&lKoTH &econ premios!";
+      capturing = "\n&eNadie esta capturando el evento de &b&lKoTH &econ premios!\n";
     } else {
-      capturing = "\n&eEstan capturando el evento de &b&lKoTH &econ premios!";
+      capturing = "\n&eEstan capturando el evento de &b&lKoTH &econ premios!&r\n";
     }
 
     this.plugin.getServer()
-        .broadcastMessage(ChatColor.translateAlternateColorCodes('&', capturing.concat("\n&fMundo: &e" + getWorldName()
-            + "&f (X: &6" + x + "&f Z: &6" + z + "&f) Fin: &c" + getTimeLeft() + "&f!\n")));
+        .broadcastMessage(ChatColor
+            .translateAlternateColorCodes('&',
+                capturing + "&fMundo: &e%world_name%&f (X: &6%x%&f Z: &6%z%&f) Fin: &c%time_left%&f!&r\n")
+            .replace("%koth%", name).replace("%world_name%", getWorldName()).replace("%x%", String.valueOf(x))
+            .replace("%z%", String.valueOf(z)).replace("%time_left%", getTimeLeft()));
   }
 
   public void start() {
