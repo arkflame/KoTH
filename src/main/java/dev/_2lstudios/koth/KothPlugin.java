@@ -13,6 +13,7 @@ import dev._2lstudios.koth.koth.KothManager;
 import dev._2lstudios.koth.listeners.BlockPlaceListener;
 import dev._2lstudios.koth.listeners.PlayerMoveListener;
 import dev._2lstudios.koth.listeners.PlayerQuitListener;
+import dev._2lstudios.koth.listeners.PlayerJoinListener;
 import dev._2lstudios.koth.listeners.PlayerTeleportListener;
 import dev._2lstudios.koth.placeholders.KothPlaceholders;
 import dev._2lstudios.koth.schedule.KothScheduleManager;
@@ -51,10 +52,11 @@ public class KothPlugin extends JavaPlugin {
         getCommand("koth").setExecutor(new KothCommand(kothManager, kothScheduleManager));
         getCommand("koths").setExecutor(new KothsCommand(kothManager, kothScheduleManager));
 
-        pluginManager.registerEvents(new BlockPlaceListener(kothManager), (Plugin) this);
-        pluginManager.registerEvents(new PlayerMoveListener(kothManager), (Plugin) this);
-        pluginManager.registerEvents(new PlayerQuitListener(kothManager), (Plugin) this);
-        pluginManager.registerEvents(new PlayerTeleportListener(kothManager), (Plugin) this);
+        pluginManager.registerEvents(new BlockPlaceListener(kothManager), this);
+        pluginManager.registerEvents(new PlayerMoveListener(kothManager), this);
+        pluginManager.registerEvents(new PlayerJoinListener(kothManager), this);
+        pluginManager.registerEvents(new PlayerQuitListener(kothManager), this);
+        pluginManager.registerEvents(new PlayerTeleportListener(kothManager), this);
 
         if (pluginManager.isPluginEnabled("PlaceholderAPI")) {
             this.kothPlaceholders = new KothPlaceholders((Plugin) this, kothManager, kothScheduleManager);

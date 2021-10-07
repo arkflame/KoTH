@@ -102,9 +102,9 @@ public class KothEvent {
     final int z = getCenterZ();
 
     if (topPlayer == null) {
-      capturing = "\n&eNadie esta capturando el evento de &b&lKoTH&e!\n";
+      capturing = "\n&e¡Nadie esta capturando el evento de &b&lKoTH&e!\n";
     } else {
-      capturing = "\n&eEstan capturando el evento de &b&lKoTH&e!&r\n";
+      capturing = "\n&e¡Estan capturando el evento de &b&lKoTH&e!&r\n";
     }
 
     this.plugin.getServer()
@@ -112,7 +112,7 @@ public class KothEvent {
             .translateAlternateColorCodes('&',
                 capturing + "&fMundo: &e%world_name%&f (X: &6%x%&f Z: &6%z%&f) Fin: &c%time_left%&f!&r\n")
             .replace("%koth%", name).replace("%world_name%", getWorldName()).replace("%x%", String.valueOf(x))
-            .replace("%z%", String.valueOf(z)).replace("%time_left%", getTimeLeft()));
+            .replace("%z%", String.valueOf(z)).replace("%time_left%", getTimeLeft()).replace("%top_player%", topPlayer.getName()));
   }
 
   public void start() {
