@@ -15,6 +15,6 @@ public class PlayerJoinListener implements Listener {
 
   @EventHandler(ignoreCancelled = true)
   public void onPlayerJoin(final PlayerJoinEvent event) {
-    this.kothManager.addPlayer(event.getPlayer().getUniqueId(), event.getPlayer().getName());
+    this.kothManager.addPlayer(event.getPlayer());
   }
 }

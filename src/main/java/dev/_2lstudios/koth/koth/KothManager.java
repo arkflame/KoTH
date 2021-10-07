@@ -57,6 +57,10 @@ public class KothManager {
     return kothPlayer;
   }
 
+  public KothPlayer addPlayer(final Player player) {
+    return addPlayer(player.getUniqueId(), player.getName());
+  }
+
   public KothPlayer getPlayer(final UUID uuid) {
     return this.kothPlayerMap.getOrDefault(uuid, null);
   }
