@@ -3,6 +3,7 @@ package dev._2lstudios.koth;
 import java.io.File;
 
 import org.bukkit.Server;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -59,12 +60,16 @@ public class KothPlugin extends JavaPlugin {
         pluginManager.registerEvents(new PlayerTeleportListener(kothManager), this);
 
         if (pluginManager.isPluginEnabled("PlaceholderAPI")) {
-            this.kothPlaceholders = new KothPlaceholders((Plugin) this, kothManager, kothScheduleManager);
+            this.kothPlaceholders = new KothPlaceholders(this, kothManager, kothScheduleManager);
             this.kothPlaceholders.register();
         }
 
-        server.getScheduler().runTaskTimerAsynchronously((Plugin) this,
-                (Runnable) new KothSecondTask(server, kothScheduleManager, kothManager), 20L, 20L);
+        for (final Player player : getServer().getOnlinePlayers()) {
+            kothManager.addPlayer(player);
+        }
+
+        server.getScheduler().runTaskTimerAsynchronously(this,
+                new KothSecondTask(server, kothScheduleManager, kothManager), 20L, 20L);
     }
 
     public void onDisable() {
