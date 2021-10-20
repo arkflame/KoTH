@@ -112,7 +112,8 @@ public class KothEvent {
             .translateAlternateColorCodes('&',
                 capturing + "&fMundo: &e%world_name%&f (X: &6%x%&f Z: &6%z%&f) Termina: &c%time_left%&f!&r\n")
             .replace("%koth%", name).replace("%world_name%", getWorldName()).replace("%x%", String.valueOf(x))
-            .replace("%z%", String.valueOf(z)).replace("%time_left%", getTimeLeft()).replace("%top_player%", topPlayer.getName()));
+            .replace("%z%", String.valueOf(z)).replace("%time_left%", getTimeLeft())
+            .replace("%top_player%", topPlayer == null ? "" : topPlayer.getName()));
   }
 
   public void start() {
