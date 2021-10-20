@@ -74,6 +74,7 @@ public class KothEvent {
     if (!rewards.isEmpty()) {
       this.rewards = rewards.<ItemStack>toArray(new ItemStack[0]);
     }
+
     this.maxTime = maxTime;
     this.captureTime = captureTime;
     this.lastStartTime = System.currentTimeMillis();
@@ -168,10 +169,12 @@ public class KothEvent {
             firework.setFireworkMeta(fireworkMeta);
 
             for (final ItemStack itemStack : this.rewards) {
-              if (playerInventory.firstEmpty() != -1) {
-                playerInventory.addItem(new ItemStack[] { itemStack });
-              } else {
-                world.dropItem(winnerLocation, itemStack);
+              if (itemStack != null) {
+                if (playerInventory.firstEmpty() != -1) {
+                  playerInventory.addItem(new ItemStack[] { itemStack });
+                } else {
+                  world.dropItem(winnerLocation, itemStack);
+                }
               }
             }
           });
@@ -256,7 +259,9 @@ public class KothEvent {
       for (int i = 0; i < this.rewards.length; i++) {
         final ItemStack itemStack = this.rewards[i];
 
-        yamlConfiguration.set("rewards." + i, itemStack);
+        if (itemStack != null) {
+          yamlConfiguration.set("rewards." + i, itemStack);
+        }
       }
     }
     this.configurationUtil.saveConfiguration(yamlConfiguration, "%datafolder%/koths/" + this.name + ".yml");
