@@ -50,9 +50,9 @@ public class KothEvent {
 
     final YamlConfiguration yamlConfiguration = configurationUtil
         .getConfiguration("%datafolder%/koths/" + name + ".yml");
-    final String worldName = yamlConfiguration.getString("locations.world");
-    final Vector vector1 = yamlConfiguration.getVector("locations.vector1");
-    final Vector vector2 = yamlConfiguration.getVector("locations.vector2");
+    this.worldName = yamlConfiguration.getString("locations.world");
+    this.position1 = yamlConfiguration.getVector("locations.vector1");
+    this.position1 = yamlConfiguration.getVector("locations.vector2");
     final Collection<ItemStack> rewards = new HashSet<>();
     final ConfigurationSection rewardsSection = yamlConfiguration.getConfigurationSection("rewards");
     final int maxTime = yamlConfiguration.getInt("maxtime");
@@ -67,9 +67,6 @@ public class KothEvent {
     this.configurationUtil = configurationUtil;
     this.kothPlayers = kothPlayers;
     this.name = name;
-    this.worldName = worldName;
-    this.position1 = vector1;
-    this.position1 = vector2;
 
     if (!rewards.isEmpty()) {
       this.rewards = rewards.<ItemStack>toArray(new ItemStack[0]);
