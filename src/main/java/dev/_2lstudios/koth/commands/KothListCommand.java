@@ -21,6 +21,6 @@ public class KothListCommand {
       appendKoth(stringBuilder, kothName, kothManager);
     }
 
-    player.sendMessage(kothManager.getKothEventsNames().toString());
+    player.sendMessage(stringBuilder.toString());
   }
 }
