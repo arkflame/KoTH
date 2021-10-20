@@ -24,36 +24,37 @@ public class PlayerMoveListener implements Listener {
     Location from = event.getFrom();
     Location to = event.getTo();
 
-    if (from.equals(to)) {
-      return;
-    }
+    if (!from.equals(to)) {
+      Player player = event.getPlayer();
+      KothPlayer kothPlayer = this.kothManager.getPlayer(player.getUniqueId());
 
-    Player player = event.getPlayer();
-    KothPlayer kothPlayer = this.kothManager.getPlayer(player.getUniqueId());
-    KothEvent kothEvent = kothPlayer.getKothEvent();
+      if (kothPlayer != null) {
+        KothEvent kothEvent = kothPlayer.getKothEvent();
 
-    if (kothEvent != null && (player.isDead() || player.getGameMode() == GameMode.SPECTATOR)) {
-      kothPlayer.setKothEvent(null);
+        if (kothEvent != null && (player.isDead() || player.getGameMode() == GameMode.SPECTATOR)) {
+          kothPlayer.setKothEvent(null);
 
-      return;
-    }
+          return;
+        }
 
-    Location toLocation = event.getTo();
-    boolean inside = false;
+        Location toLocation = event.getTo();
+        boolean inside = false;
 
-    for (KothEvent kothEvent1 : this.kothManager.getKothEvents()) {
-      if (kothEvent1.isRunning() && kothEvent1.isInside(toLocation)) {
-        kothPlayer.setKothEvent(kothEvent1);
-        inside = true;
+        for (KothEvent kothEvent1 : this.kothManager.getKothEvents()) {
+          if (kothEvent1.isRunning() && kothEvent1.isInside(toLocation)) {
+            kothPlayer.setKothEvent(kothEvent1);
+            inside = true;
 
-        break;
+            break;
+          }
+        }
+        if (inside && kothEvent == null) {
+          player.sendMessage(ChatColor.GREEN + "Estas capturando el KoTH!");
+        } else if (!inside && kothEvent != null) {
+          kothPlayer.setKothEvent(null);
+          player.sendMessage(ChatColor.RED + "Ya no estas capturando el KoTH!");
+        }
       }
-    }
-    if (inside && kothEvent == null) {
-      player.sendMessage(ChatColor.GREEN + "Estas capturando el KoTH!");
-    } else if (!inside && kothEvent != null) {
-      kothPlayer.setKothEvent(null);
-      player.sendMessage(ChatColor.RED + "Ya no estas capturando el KoTH!");
     }
   }
 }

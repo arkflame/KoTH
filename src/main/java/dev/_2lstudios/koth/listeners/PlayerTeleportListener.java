@@ -22,23 +22,26 @@ public class PlayerTeleportListener implements Listener {
   public void onPlayerTeleport(PlayerTeleportEvent event) {
     Player player = event.getPlayer();
     KothPlayer kothPlayer = this.kothManager.getPlayer(player.getUniqueId());
-    KothEvent lastKothEvent = kothPlayer.getKothEvent();
-    Location toLocation = event.getTo();
-    boolean inside = false;
 
-    for (KothEvent kothEvent : this.kothManager.getKothEvents()) {
-      if (kothEvent.isRunning() && kothEvent.isInside(toLocation)) {
-        kothPlayer.setKothEvent(kothEvent);
-        inside = true;
+    if (kothPlayer != null) {
+      KothEvent lastKothEvent = kothPlayer.getKothEvent();
+      Location toLocation = event.getTo();
+      boolean inside = false;
 
-        break;
+      for (KothEvent kothEvent : this.kothManager.getKothEvents()) {
+        if (kothEvent.isRunning() && kothEvent.isInside(toLocation)) {
+          kothPlayer.setKothEvent(kothEvent);
+          inside = true;
+
+          break;
+        }
       }
-    }
-    if (inside && lastKothEvent == null) {
-      player.sendMessage(ChatColor.GREEN + "Estas capturando el KoTH!");
-    } else if (!inside && lastKothEvent != null) {
-      kothPlayer.setKothEvent(null);
-      player.sendMessage(ChatColor.RED + "Ya no estas capturando el KoTH!");
+      if (inside && lastKothEvent == null) {
+        player.sendMessage(ChatColor.GREEN + "Estas capturando el KoTH!");
+      } else if (!inside && lastKothEvent != null) {
+        kothPlayer.setKothEvent(null);
+        player.sendMessage(ChatColor.RED + "Ya no estas capturando el KoTH!");
+      }
     }
   }
 }
